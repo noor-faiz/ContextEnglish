@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div th:fragment="navbar" class="navbar">
+  <div class="navbar-inner">
+    <a th:href="@{/}" class="brand">
+      <img src="/images/logo.svg" alt="ContextEnglish logo" width="36" height="36"/>
+      <span><span class="brand-context">Context</span><span class="brand-english">English</span></span>
+    </a>
+
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-links" id="navLinks" sec:authorize="isAuthenticated()">
+      <div sec:authorize="hasRole('LEARNER')" class="nav-links-group">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/progress}">Progress</a>
+        <a th:href="@{/vocabulary}">Vocabulary</a>
+        <a th:href="@{/achievements}">Achievements</a>
+        <a th:href="@{/profile}">Profile</a>
+      </div>
+      <div sec:authorize="hasRole('ADMIN')" class="nav-links-group">
+        <a th:href="@{/admin}">Overview</a>
+        <a th:href="@{/admin/content}">Content</a>
+        <a th:href="@{/admin/users}">Users</a>
+        <a th:href="@{/profile}">Profile</a>
+      </div>
+      <form th:action="@{/logout}" method="post" class="nav-logout-form">
+        <button type="submit" class="btn btn-ghost btn-sm btn-block">Log out</button>
+      </form>
+    </div>
+
+    <div class="nav-links" id="navLinks" sec:authorize="!isAuthenticated()">
+      <a th:href="@{/login}">Log in</a>
+      <a th:href="@{/register}" class="btn btn-primary btn-sm">Get started</a>
+    </div>
+  </div>
+</div>
+<script th:src="@{/js/nav.js}"></script>
+</body>
+</html>

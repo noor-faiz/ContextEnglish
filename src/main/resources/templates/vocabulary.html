@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vocabulary - ContextEnglish</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container page-wrap">
+  <div class="page-header">
+    <h1>Your vocabulary</h1>
+    <p class="text-muted">Every word and phrase you've encountered, with how well you've mastered it.</p>
+  </div>
+
+  <div th:if="${words.isEmpty()}" class="empty-state">
+    You haven't encountered any words yet — <a th:href="@{/session/start}">start a session</a> to begin building your vocabulary.
+  </div>
+
+  <div th:each="w : ${words}" class="word-chip">
+    <div>
+      <strong th:text="${w.targetItem.surfaceText}">word</strong>
+      <span class="text-muted" style="font-size:0.82rem; margin-left:8px;" th:text="${w.targetItem.itemType}">WORD</span>
+      <div class="text-muted" style="font-size:0.8rem;" th:text="${w.correctCount} + ' / ' + ${w.attempts} + ' correct attempts'">0 / 0</div>
+    </div>
+    <div class="mastery-dots" th:title="'Mastery level: ' + ${w.masteryLevel} + ' / 5'">
+      <span class="mastery-dot" th:each="i : ${#numbers.sequence(1,5)}"
+            th:classappend="${i <= w.masteryLevel} ? 'filled' : ''"></span>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

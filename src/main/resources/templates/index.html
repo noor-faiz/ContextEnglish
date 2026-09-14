@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ContextEnglish - Learn English Through Context</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Learn English the way you naturally understand it.</h1>
+    <p class="lead">No vocabulary lists to memorize. No repetitive grammar drills. Just short, real-life
+      passages where you guess meaning from context &mdash; and learn it for good.</p>
+    <div class="hero-actions">
+      <a th:href="@{/register}" class="btn btn-accent">Start learning free</a>
+      <a th:href="@{/login}" class="btn btn-outline" style="background:rgba(255,255,255,0.1); color:#fff; border-color:rgba(255,255,255,0.6);">I already have an account</a>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="example-card">
+    <div class="example-label">How it feels</div>
+    <p style="font-size:1.1rem; color:var(--color-ink);">
+      "After the long hike, everyone was completely
+      <span class="underline-word">exhausted</span> and just wanted to rest."
+    </p>
+    <p class="text-muted" style="margin-bottom:0;">
+      <strong>What does "exhausted" mean here?</strong><br/>
+      A) Excited &nbsp; B) Very tired &nbsp; C) Confused &nbsp; D) Hungry<br/>
+      <em>→ Correct! "Exhausted" means extremely tired — notice it follows "long hike," a physical-effort clue.</em>
+    </p>
+  </div>
+</div>
+
+<section class="features-strip">
+  <div class="container">
+    <h2 class="text-center" style="margin-bottom: 40px;">Built around one simple idea</h2>
+    <div class="grid grid-3">
+      <div class="feature-tile">
+        <div class="feature-icon">🧩</div>
+        <h3>Guess from context</h3>
+        <p>Difficult words and phrases are highlighted inside real passages. You infer meaning the way you
+          would in everyday reading — not from a flashcard.</p>
+      </div>
+      <div class="feature-tile">
+        <div class="feature-icon">🎯</div>
+        <h3>Personalized difficulty</h3>
+        <p>A short placement test sets your starting level, then every session quietly adapts based on how
+          you're doing — no manual settings required.</p>
+      </div>
+      <div class="feature-tile">
+        <div class="feature-icon">🔁</div>
+        <h3>Smart word resurfacing</h3>
+        <p>Words you struggled with reappear later in brand-new passages, reinforcing them naturally instead
+          of forcing rote repetition.</p>
+      </div>
+      <div class="feature-tile">
+        <div class="feature-icon">✍️</div>
+        <h3>More than one right answer</h3>
+        <p>Answer by multiple choice, free text, or multi-select. Synonyms and close paraphrases are
+          recognized — not just one exact match.</p>
+      </div>
+      <div class="feature-tile">
+        <div class="feature-icon">🌏</div>
+        <h3>Native-language explanations</h3>
+        <p>Every explanation can appear in your own language alongside English, so nothing gets lost in
+          translation.</p>
+      </div>
+      <div class="feature-tile">
+        <div class="feature-icon">🏆</div>
+        <h3>Progress that means something</h3>
+        <p>Track your vocabulary growth, streaks, and weak areas — and unlock achievements as you go.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

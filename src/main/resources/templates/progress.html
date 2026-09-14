@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your progress - ContextEnglish</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container page-wrap">
+  <div class="page-header">
+    <h1>Your progress</h1>
+    <p class="text-muted">A look at how far you've come and where to focus next.</p>
+  </div>
+
+  <div class="grid grid-4" style="margin-bottom:28px;">
+    <div class="stat-card">
+      <span class="stat-value" th:text="${summary.currentStreak}">0</span>
+      <span class="stat-label">Day streak</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" th:text="${summary.sessionsCompleted}">0</span>
+      <span class="stat-label">Sessions done</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" th:text="${summary.totalWordsLearned}">0</span>
+      <span class="stat-label">Words mastered</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" th:text="${summary.currentLevel}">BEGINNER</span>
+      <span class="stat-label">Current level</span>
+    </div>
+  </div>
+
+  <div class="grid grid-2" style="align-items:start;">
+    <div class="card">
+      <h3>Score history</h3>
+      <canvas id="scoreChart" height="200"></canvas>
+    </div>
+
+    <div class="card">
+      <h3>Weak areas</h3>
+      <p class="text-muted" style="font-size:0.88rem;">Accuracy by content type — lower bars need more practice.</p>
+
+      <div th:if="${weakAreas.isEmpty()}" class="empty-state" style="padding:30px 10px;">
+        Complete a few sessions to see your weak-area breakdown here.
+      </div>
+
+      <div th:each="area : ${weakAreas}" style="margin-bottom:14px;">
+        <div class="flex-between" style="font-size:0.88rem; margin-bottom:4px;">
+          <span th:text="${area.itemType}">WORD</span>
+          <span th:text="${#numbers.formatDecimal(area.accuracyPercent, 1, 0)} + '%'">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" th:style="'width:' + ${area.accuracyPercent} + '%'"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  const scoreLabels = /*[[${summary.scoreLabels}]]*/ [];
+  const scoreValues = /*[[${summary.scoreValues}]]*/ [];
+  /*]]>*/
+
+  const ctx = document.getElementById('scoreChart');
+  if (scoreLabels.length === 0) {
+    ctx.replaceWith(Object.assign(document.createElement('p'), {
+      className: 'text-muted', textContent: 'Complete a session to see your score history here.'
+    }));
+  } else {
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: scoreLabels,
+        datasets: [{
+          label: 'Score', data: scoreValues, borderColor: '#2447c4',
+          backgroundColor: 'rgba(36,71,196,0.12)', tension: 0.35, fill: true,
+          pointBackgroundColor: '#f59e0b'
+        }]
+      },
+      options: { scales: { y: { min: 0, max: 100 } }, plugins: { legend: { display: false } } }
+    });
+  }
+</script>
+</body>
+</html>

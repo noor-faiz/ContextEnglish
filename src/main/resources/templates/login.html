@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Log in - ContextEnglish</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-narrow page-wrap">
+  <div class="card">
+    <h2 class="text-center">Welcome back</h2>
+    <p class="text-center text-muted">Log in to continue your learning streak.</p>
+
+    <div class="alert alert-error" th:if="${param.error}">Incorrect username/email or password. Please try again.</div>
+    <div class="alert alert-info" th:if="${param.logout}">You've been logged out.</div>
+    <div class="alert alert-success" th:if="${registeredOk}">Account created! Log in to get started.</div>
+
+    <form th:action="@{/login}" method="post">
+      <div class="form-group">
+        <label for="usernameOrEmail">Username or email</label>
+        <input type="text" id="usernameOrEmail" name="usernameOrEmail" required autofocus/>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required/>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Log in</button>
+    </form>
+
+    <p class="text-center text-muted" style="margin-top:18px;">
+      New here? <a th:href="@{/register}">Create an account</a>
+    </p>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

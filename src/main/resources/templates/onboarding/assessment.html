@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Placement test - ContextEnglish</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-narrow page-wrap">
+  <div class="card">
+    <span class="level-badge level-intermediate">Step 2 of 2</span>
+    <h2 style="margin-top:12px;">Quick placement test</h2>
+    <p class="text-muted">Answer as best you can &mdash; there's no time limit, and it's fine to guess.
+      This just sets your starting level; it'll keep adjusting as you practice.</p>
+
+    <form th:action="@{/onboarding/assessment}" method="post">
+      <div th:each="q, iter : ${questions}" class="card-flat" style="margin-bottom:16px;">
+        <p style="font-weight:600; color:var(--color-ink);" th:text="${iter.count} + '. ' + ${q.questionText}">Question text</p>
+        <div class="checkbox-row" style="margin-bottom:8px;">
+          <input type="radio" th:id="'q' + ${q.id} + 'o1'" th:name="'q_' + ${q.id}" value="1"/>
+          <label th:for="'q' + ${q.id} + 'o1'" style="margin:0; font-weight:400;" th:text="${q.option1}">Option 1</label>
+        </div>
+        <div class="checkbox-row" style="margin-bottom:8px;">
+          <input type="radio" th:id="'q' + ${q.id} + 'o2'" th:name="'q_' + ${q.id}" value="2"/>
+          <label th:for="'q' + ${q.id} + 'o2'" style="margin:0; font-weight:400;" th:text="${q.option2}">Option 2</label>
+        </div>
+        <div class="checkbox-row" style="margin-bottom:8px;">
+          <input type="radio" th:id="'q' + ${q.id} + 'o3'" th:name="'q_' + ${q.id}" value="3"/>
+          <label th:for="'q' + ${q.id} + 'o3'" style="margin:0; font-weight:400;" th:text="${q.option3}">Option 3</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="radio" th:id="'q' + ${q.id} + 'o4'" th:name="'q_' + ${q.id}" value="4"/>
+          <label th:for="'q' + ${q.id} + 'o4'" style="margin:0; font-weight:400;" th:text="${q.option4}">Option 4</label>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">See my results</button>
+    </form>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

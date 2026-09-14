@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - ContextEnglish</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container page-wrap">
+
+  <div class="page-header flex-between flex-wrap gap-12">
+    <div>
+      <h1 th:text="'Welcome back, ' + ${user.username} + '!'">Welcome back!</h1>
+      <span class="level-badge" th:classappend="'level-' + ${#strings.toLowerCase(user.currentLevel.name())}"
+            th:text="${user.currentLevel}">LEVEL</span>
+    </div>
+    <a th:href="@{/session/start}" class="btn btn-primary">Continue learning &rarr;</a>
+  </div>
+
+  <div class="grid grid-4" style="margin-bottom:28px;">
+    <div class="stat-card">
+      <span class="stat-value" th:text="${summary.currentStreak}">0</span>
+      <span class="stat-label">Day streak</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" th:text="${summary.sessionsCompleted}">0</span>
+      <span class="stat-label">Sessions done</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" th:text="${summary.totalWordsLearned}">0</span>
+      <span class="stat-label">Words mastered</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value" th:text="${#numbers.formatDecimal(summary.difficultyScore, 1, 1)}">0.0</span>
+      <span class="stat-label">Difficulty score</span>
+    </div>
+  </div>
+
+  <div class="grid grid-2" style="align-items:start;">
+    <div class="card">
+      <h3>Your recent scores</h3>
+      <canvas id="scoreChart" height="180"></canvas>
+    </div>
+
+    <div class="card">
+      <h3>Quick practice feed</h3>
+      <p class="text-muted" style="font-size:0.9rem;">Short bite-sized cards for a fast refresher.</p>
+      <div id="dailyFeedList">
+        <p class="text-muted" style="font-size:0.85rem;">Loading...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  const scoreLabels = /*[[${summary.scoreLabels}]]*/ [];
+  const scoreValues = /*[[${summary.scoreValues}]]*/ [];
+  /*]]>*/
+
+  const ctx = document.getElementById('scoreChart');
+  if (scoreLabels.length === 0) {
+    ctx.replaceWith(Object.assign(document.createElement('p'), {
+      className: 'text-muted', textContent: 'Complete a session to see your score history here.'
+    }));
+  } else {
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: scoreLabels,
+        datasets: [{
+          label: 'Score',
+          data: scoreValues,
+          borderColor: '#2447c4',
+          backgroundColor: 'rgba(36,71,196,0.12)',
+          tension: 0.35,
+          fill: true,
+          pointBackgroundColor: '#f59e0b'
+        }]
+      },
+      options: {
+        scales: { y: { min: 0, max: 100 } },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  fetch('/api/feed/daily').then(r => r.json()).then(cards => {
+    const container = document.getElementById('dailyFeedList');
+    container.innerHTML = '';
+    if (cards.length === 0) {
+      container.innerHTML = '<p class="text-muted" style="font-size:0.85rem;">No quick-practice cards yet — try a full session instead!</p>';
+      return;
+    }
+    cards.forEach(card => {
+      const a = document.createElement('a');
+      a.href = '/session/start/' + card.id;
+      a.className = 'card-flat';
+      a.style.cssText = 'display:block; margin-bottom:10px; text-decoration:none;';
+      a.innerHTML = '<strong style="color:var(--color-ink);">' + card.title + '</strong>' +
+        (card.topic ? '<div class="text-muted" style="font-size:0.82rem;">' + card.topic + '</div>' : '');
+      container.appendChild(a);
+    });
+  }).catch(() => {
+    document.getElementById('dailyFeedList').innerHTML =
+      '<p class="text-muted" style="font-size:0.85rem;">Couldn\'t load the feed right now.</p>';
+  });
+</script>
+</body>
+</html>

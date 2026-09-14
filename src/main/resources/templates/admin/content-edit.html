@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${passageId != null ? 'Edit passage' : 'New passage'} + ' - ContextEnglish'">Edit passage</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container page-wrap">
+  <div class="page-header">
+    <h1 th:text="${passageId != null ? 'Edit passage' : 'New passage'}">New passage</h1>
+    <p class="text-muted">Write the passage, then mark each difficult word or phrase as a target item with its
+      acceptable answers, distractors, and explanation.</p>
+  </div>
+
+  <div class="alert alert-error" id="formError" style="display:none;"></div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" id="title" placeholder="e.g. A Tired Traveler"/>
+    </div>
+    <div class="form-group">
+      <label for="contentText">Passage text</label>
+      <textarea id="contentText" rows="6" placeholder="Write the full passage here. Every target word's exact spelling must appear in this text."></textarea>
+    </div>
+    <div class="grid grid-3">
+      <div class="form-group">
+        <label for="level">Level</label>
+        <select id="level">
+          <option value="BEGINNER">Beginner</option>
+          <option value="INTERMEDIATE">Intermediate</option>
+          <option value="ADVANCED">Advanced</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="contentType">Content type</label>
+        <select id="contentType">
+          <option value="STORY">Story (full session)</option>
+          <option value="MICRO">Micro (quick-feed card)</option>
+          <option value="WEEKLY">Weekly challenge</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="topic">Topic (optional)</label>
+        <input type="text" id="topic" placeholder="e.g. travel, work"/>
+      </div>
+    </div>
+  </div>
+
+  <h3>Target items</h3>
+  <div id="targetItemsContainer"></div>
+  <button type="button" class="btn btn-outline" id="addTargetItemBtn" style="margin-bottom:24px;">+ Add target word / phrase</button>
+
+  <div class="flex gap-12">
+    <button type="button" class="btn btn-primary" id="savePassageBtn">Save passage</button>
+    <a th:href="@{/admin/content}" class="btn btn-ghost">Cancel</a>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<template id="targetItemTemplate">
+  <div class="target-item-block" data-block>
+    <button type="button" class="remove-row-btn" style="position:absolute; top:14px; right:14px;" data-remove-item>&times;</button>
+    <div class="grid grid-3">
+      <div class="form-group">
+        <label>Surface text (must match the passage exactly)</label>
+        <input type="text" data-field="surfaceText"/>
+      </div>
+      <div class="form-group">
+        <label>Item type</label>
+        <select data-field="itemType">
+          <option value="WORD">Word</option>
+          <option value="IDIOM">Idiom / expression</option>
+          <option value="GRAMMAR">Grammar</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Answer mode</label>
+        <select data-field="answerMode">
+          <option value="MCQ">Multiple choice</option>
+          <option value="FREE_TEXT">Free text</option>
+          <option value="MULTI_SELECT">Multi-select</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Hint (optional)</label>
+      <input type="text" data-field="hintText"/>
+    </div>
+
+    <label>Acceptable answers <span class="text-muted" style="font-weight:400;">(the correct meaning(s) — used for MCQ/multi-select choices and free-text matching)</span></label>
+    <div data-answers-container></div>
+    <button type="button" class="btn btn-sm btn-outline" data-add-answer style="margin-bottom:14px;">+ Add acceptable answer</button>
+
+    <label>Distractor options <span class="text-muted" style="font-weight:400;">(wrong choices, for MCQ/multi-select only)</span></label>
+    <div data-distractors-container></div>
+    <button type="button" class="btn btn-sm btn-outline" data-add-distractor style="margin-bottom:14px;">+ Add distractor</button>
+
+    <div class="form-group">
+      <label>Explanation (English)</label>
+      <textarea rows="2" data-field="explanationText"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Explanation (native language, e.g. Bangla) — optional</label>
+      <textarea rows="2" data-field="explanationNative"></textarea>
+    </div>
+  </div>
+</template>
+
+<template id="answerRowTemplate">
+  <div class="answer-row" data-answer-row>
+    <input type="text" placeholder="Answer text" data-answer-text/>
+    <select data-answer-type>
+      <option value="EXACT">Exact</option>
+      <option value="SYNONYM">Synonym</option>
+      <option value="KEYWORD">Keyword</option>
+      <option value="CATEGORY">Category</option>
+    </select>
+    <button type="button" class="remove-row-btn" data-remove-row>&times;</button>
+  </div>
+</template>
+
+<template id="distractorRowTemplate">
+  <div class="distractor-row" data-distractor-row>
+    <input type="text" placeholder="Wrong option text" data-distractor-text/>
+    <button type="button" class="remove-row-btn" data-remove-row>&times;</button>
+  </div>
+</template>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  window.EXISTING_PASSAGE = /*[[${passage}]]*/ null;
+  window.PASSAGE_ID = /*[[${passageId}]]*/ null;
+  /*]]>*/
+</script>
+<script th:src="@{/js/admin-content.js}"></script>
+</body>
+</html>

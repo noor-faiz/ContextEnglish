@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Session complete - ContextEnglish</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-narrow page-wrap text-center">
+  <div class="card">
+    <div style="font-size:3rem;">🎉</div>
+    <h2>Session complete!</h2>
+    <p class="text-muted" th:if="${attempt.passage != null}" th:text="'From: ' + ${attempt.passage.title}">Passage title</p>
+
+    <div class="stat-card" style="margin: 20px auto; max-width:220px;" th:if="${attempt.score != null}">
+      <span class="stat-value" th:text="${#numbers.formatDecimal(attempt.score, 1, 0)} + '%'">0%</span>
+      <span class="stat-label">Session score</span>
+    </div>
+    <p class="text-muted" th:if="${attempt.score == null}">This session isn't finished yet.</p>
+
+    <div th:if="${newAchievements != null and !newAchievements.isEmpty()}" style="margin-bottom:20px;">
+      <h3>New achievement<span th:if="${newAchievements.size() > 1}">s</span> unlocked!</h3>
+      <div class="flex gap-12" style="justify-content:center; flex-wrap:wrap;">
+        <div class="achievement-badge" th:each="a : ${newAchievements}" style="max-width:180px;">
+          <div class="badge-icon" th:text="${a.icon}">🏆</div>
+          <strong th:text="${a.title}">Title</strong>
+          <p class="text-muted" style="font-size:0.8rem;" th:text="${a.description}">Description</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-12" style="justify-content:center;">
+      <a th:href="@{/session/start}" class="btn btn-primary">Practice again</a>
+      <a th:href="@{/dashboard}" class="btn btn-outline">Back to dashboard</a>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

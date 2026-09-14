@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage content - ContextEnglish</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container page-wrap">
+  <div class="page-header flex-between flex-wrap gap-12">
+    <div>
+      <h1>Manage content</h1>
+      <p class="text-muted">Passages, target words, and their acceptable answers.</p>
+    </div>
+    <a th:href="@{/admin/content/new}" class="btn btn-primary">+ New passage</a>
+  </div>
+
+  <div class="alert alert-success" th:if="${deletedOk}">Passage deleted.</div>
+
+  <div class="card">
+    <div class="table-scroll">
+      <table class="admin-table">
+        <thead>
+          <tr><th>Title</th><th>Level</th><th>Type</th><th>Topic</th><th>Target items</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="p : ${passages}">
+            <td th:text="${p.title}">Title</td>
+            <td><span class="level-badge" th:classappend="'level-' + ${#strings.toLowerCase(p.level.name())}" th:text="${p.level}">LEVEL</span></td>
+            <td th:text="${p.contentType}">STORY</td>
+            <td th:text="${p.topic}">topic</td>
+            <td th:text="${#lists.size(p.targetItems)}">0</td>
+            <td class="flex gap-8">
+              <a th:href="@{'/admin/content/edit/' + ${p.id}}" class="btn btn-sm btn-outline">Edit</a>
+              <form th:action="@{'/admin/content/' + ${p.id} + '/delete'}" method="post"
+                    onsubmit="return confirm('Delete this passage? This cannot be undone.');">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div th:if="${passages.isEmpty()}" class="empty-state">No passages yet — create your first one.</div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

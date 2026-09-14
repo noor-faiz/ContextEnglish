@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage users - ContextEnglish</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container page-wrap">
+  <div class="page-header">
+    <h1>Manage users</h1>
+    <p class="text-muted">Promote learners to admin, or remove accounts.</p>
+  </div>
+
+  <div class="alert alert-error" th:if="${userError}" th:text="${userError}">Error</div>
+
+  <div class="card">
+    <div class="table-scroll">
+      <table class="admin-table">
+        <thead>
+          <tr><th>Username</th><th>Email</th><th>Role</th><th>Level</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="u : ${users}">
+            <td th:text="${u.username}">username</td>
+            <td th:text="${u.email}">email</td>
+            <td th:text="${u.role}">LEARNER</td>
+            <td th:text="${u.currentLevel}">BEGINNER</td>
+            <td class="flex gap-8">
+              <form th:action="@{'/admin/users/' + ${u.id} + '/role'}" method="post" class="flex gap-8">
+                <select name="role" onchange="this.form.submit()" style="width:auto; padding:6px 10px;">
+                  <option value="LEARNER" th:selected="${u.role.name() == 'LEARNER'}">LEARNER</option>
+                  <option value="ADMIN" th:selected="${u.role.name() == 'ADMIN'}">ADMIN</option>
+                </select>
+              </form>
+              <form th:action="@{'/admin/users/' + ${u.id} + '/delete'}" method="post"
+                    onsubmit="return confirm('Delete this user? This cannot be undone.');">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

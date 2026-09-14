@@ -1,0 +1,13 @@
+.git
+.gitignore
+.idea
+*.iml
+target/
+HELP.md
+README.md
+.mvn/wrapper/maven-wrapper.jar
+
+# Never ship real local secrets inside the image
+src/main/resources/application-local.properties
+.env
+*.env

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Set up your preferences - ContextEnglish</title>
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container-narrow page-wrap">
+  <div class="card">
+    <span class="level-badge level-beginner">Step 1 of 2</span>
+    <h2 style="margin-top:12px;">A couple of quick preferences</h2>
+    <p class="text-muted">This helps us tailor explanations and pacing to you. You can change these anytime later.</p>
+
+    <form th:action="@{/onboarding/preferences}" th:object="${preferenceUpdateRequest}" method="post">
+      <div class="form-group">
+        <label for="nativeLanguage">Preferred language for explanations</label>
+        <select id="nativeLanguage" th:field="*{nativeLanguage}">
+          <option value="bn">Bangla (বাংলা)</option>
+          <option value="en">English only</option>
+          <option value="hi">Hindi</option>
+          <option value="ur">Urdu</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="dailyGoalMinutes">Daily practice goal (minutes)</label>
+        <input type="number" id="dailyGoalMinutes" th:field="*{dailyGoalMinutes}" min="5" max="120"/>
+      </div>
+
+      <div class="form-group">
+        <label for="topicsOfInterest">Topics you enjoy (optional)</label>
+        <input type="text" id="topicsOfInterest" th:field="*{topicsOfInterest}" placeholder="e.g. travel, movies, technology"/>
+      </div>
+
+      <div class="form-group checkbox-row">
+        <input type="checkbox" id="stretchMode" th:field="*{stretchMode}"/>
+        <label for="stretchMode" style="margin:0;">Challenge me with slightly harder content ("stretch mode")</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Continue to placement test</button>
+    </form>
+  </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

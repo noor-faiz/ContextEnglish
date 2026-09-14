@@ -1,0 +1,30 @@
+<svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ContextEnglish logo">
+  <defs>
+    <linearGradient id="ceBookGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2447c4"/>
+      <stop offset="100%" stop-color="#1a2f8a"/>
+    </linearGradient>
+    <linearGradient id="ceSparkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded backing square -->
+  <rect x="1" y="1" width="42" height="42" rx="12" fill="url(#ceBookGradient)"/>
+
+  <!-- Open book -->
+  <path d="M8 15.5c0-1.2 1-2 2.2-1.8 3 .5 5.8 1.6 7.8 3.4v14.6c-2.4-1.8-5.3-3-8.2-3.4-1-.1-1.8-1-1.8-2V15.5z"
+        fill="#ffffff" opacity="0.95"/>
+  <path d="M36 15.5c0-1.2-1-2-2.2-1.8-3 .5-5.8 1.6-7.8 3.4v14.6c2.4-1.8 5.3-3 8.2-3.4 1-.1 1.8-1 1.8-2V15.5z"
+        fill="#ffffff" opacity="0.95"/>
+  <rect x="21.1" y="16.6" width="1.8" height="14.9" fill="#c7d2fe"/>
+
+  <!-- Underlined "word" cue on the left page, representing contextual highlighting -->
+  <rect x="10.5" y="21.5" width="6.3" height="2.1" rx="1" fill="#c7d2fe"/>
+  <rect x="10.5" y="24.3" width="4.6" height="2.1" rx="1" fill="#c7d2fe"/>
+  <rect x="10.3" y="27.6" width="6.8" height="1.4" rx="0.7" fill="url(#ceSparkGradient)"/>
+
+  <!-- Small "aha" spark above the right page, representing the moment of inferring meaning -->
+  <path d="M32.2 8.6l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9.9-2.1z" fill="url(#ceSparkGradient)"/>
+</svg>
